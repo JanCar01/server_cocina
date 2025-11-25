@@ -7,6 +7,8 @@ import com.example.demo.repository.RecipeRepository;
 import com.example.demo.service.RecipeService;
 import com.example.demo.service.UserService;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,25 +32,31 @@ public class RecipeSyncController {
      */
     @PostMapping("/syncPush")
     public String syncPush(@RequestBody SyncRequestDTO data) {
-        System.out.println("? Recibido: " + data.username);
-        System.out.println("? Recetas: " + data.recipes.size());
 
-        User user = userService.getUser(data.username);
+        // 1️⃣ Obtener usuario autenticado desde JWT
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String email = auth.getName();
 
-        // 1️⃣ Eliminar recetas borradas
-        if (data.deletedIds != null && !data.deletedIds.isEmpty()) {
+        User user = userService.getUserByEmail(email);
+
+        System.out.println("🔐 Usuario autenticado = " + email);
+        System.out.println("📥 Recetas recibidas = " + data.recipes.size());
+
+        // 2️⃣ Procesar eliminaciones
+        if (data.deletedIds != null) {
             for (Long id : data.deletedIds) {
                 recipeRepository.findById(id).ifPresent(recipe -> {
                     if (recipe.getUser().getId().equals(user.getId())) {
                         recipeRepository.delete(recipe);
-                        System.out.println("🗑️ Eliminada receta ID " + id);
+                        System.out.println("🗑️ Eliminada receta id " + id);
                     }
                 });
             }
         }
 
-        // 2️⃣ Insertar o actualizar recetas activas
+        // 3️⃣ Guardar o actualizar recetas
         for (RecipeDTO dto : data.recipes) {
+
             Recipe recipe = recipeRepository.findById(dto.id).orElse(new Recipe());
 
             recipe.setId(dto.id);
@@ -56,15 +64,8 @@ public class RecipeSyncController {
             recipe.setName(dto.name);
             recipe.setDescription(dto.description);
 
-            if (recipe.getIngredients() == null)
-                recipe.setIngredients(new ArrayList<>());
-            else
-                recipe.getIngredients().clear();
-
-            if (recipe.getSteps() == null)
-                recipe.setSteps(new ArrayList<>());
-            else
-                recipe.getSteps().clear();
+            recipe.setIngredients(new ArrayList<>());
+            recipe.setSteps(new ArrayList<>());
 
             if (dto.ingredients != null) {
                 for (RecipeDTO.IngredientDTO ing : dto.ingredients) {
@@ -92,6 +93,8 @@ public class RecipeSyncController {
 
         return "OK";
     }
+
+
 
     /**
      * 🔽 Devuelve todas las recetas del usuario

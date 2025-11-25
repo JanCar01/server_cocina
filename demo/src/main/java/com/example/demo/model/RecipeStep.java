@@ -11,7 +11,7 @@ public class RecipeStep {
 
     private int stepOrder;
     private String stepText;
-
+    
     @ManyToOne
     @JoinColumn(name = "recipe_id")
     private Recipe recipe;

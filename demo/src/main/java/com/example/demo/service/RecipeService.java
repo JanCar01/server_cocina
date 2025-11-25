@@ -4,6 +4,8 @@ import com.example.demo.dto.RecipeDTO;
 import com.example.demo.model.*;
 import com.example.demo.repository.*;
 import org.springframework.stereotype.Service;
+import java.util.stream.Collectors;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +16,7 @@ public class RecipeService {
     private final RecipeRepository repo;
     private final UserService userService;
     private final UserRepository userRepository;
-
+    
     public RecipeService(RecipeRepository repo, UserService userService, UserRepository userRepository) {
         this.repo = repo;
         this.userService = userService;
@@ -64,18 +66,18 @@ public class RecipeService {
     }
 
     // 🔹 Obtener todas las recetas de un usuario
-    public List<RecipeDTO> getRecipesForUser(String username) {
+    public List<RecipeDTO> getRecipesForUser(String email) {
 
-        User user = userRepository.findByUsername(username);
-        if (user == null) {
-            throw new RuntimeException("User not found: " + username);
-        }
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found: " + email));
 
-        return repo.findByUser(user)
-                .stream()
-                .map(this::toDto)
-                .toList();
+        List<Recipe> recipes = repo.findByUser(user);
+
+        return recipes.stream()
+            .map(RecipeDTO::fromEntity)
+            .collect(Collectors.toList());
     }
+
     public RecipeDTO toDto(Recipe recipe) {
         RecipeDTO dto = new RecipeDTO();
 
