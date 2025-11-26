@@ -40,9 +40,6 @@ public class UserService {
     // 🔹 Login usando email + password
     public User loginByEmail(String email, String rawPassword) {
         User user = repo.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
-        if (user == null) {
-            throw new RuntimeException("User not found");
-        }
 
         System.out.println("📥 Raw password recibida: " + rawPassword);
         System.out.println("🔐 Password en BD: " + user.getPassword());
