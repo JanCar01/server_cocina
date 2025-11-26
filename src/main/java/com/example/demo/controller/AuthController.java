@@ -72,6 +72,9 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest req) {
+        System.out.println("📥 REGISTER req.username = " + req.getUsername());
+        System.out.println("📥 REGISTER req.email    = " + req.getEmail());
+        System.out.println("📥 REGISTER req.password = " + req.getPassword());
         try {
             User u = userService.register(req.username, req.email, req.password);
 
@@ -89,6 +92,8 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest req) {
+        System.out.println("📥 LOGIN req.email    = " + req.getEmail());
+        System.out.println("📥 LOGIN req.password = " + req.getPassword());
         try {
             User u = userService.loginByEmail(req.email, req.password);
 
