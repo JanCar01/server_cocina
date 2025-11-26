@@ -22,9 +22,10 @@ public class UserService {
         if (repo.findByUsername(username) != null) {
             throw new RuntimeException("Username already in use");
         }
-        if (repo.findByEmail(email) != null) {
+        if (repo.findByEmail(email).isPresent()) {
             throw new RuntimeException("Email already in use");
         }
+
 
         String hashed = passwordEncoder.encode(rawPassword);
 
