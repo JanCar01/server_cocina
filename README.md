@@ -7,3 +7,4 @@ Luego lanzamos springbot con:
 mvn spring-boot:run
 
 El servidor aun no tiene ip publica, solo dentro de la red local
+prueba
