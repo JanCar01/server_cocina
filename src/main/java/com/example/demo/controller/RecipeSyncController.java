@@ -67,8 +67,8 @@ public class RecipeSyncController {
 
             recipe.setId(dto.id);
             recipe.setUser(user);
-            recipe.setName(dto.title);
-            recipe.setDescription(dto.duration);
+            recipe.setName(dto.name);
+            recipe.setDescription(dto.description);
 
             recipe.getIngredients().clear();
             recipe.getSteps().clear();
