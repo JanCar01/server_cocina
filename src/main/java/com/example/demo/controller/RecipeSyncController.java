@@ -70,8 +70,8 @@ public class RecipeSyncController {
             recipe.setName(dto.title);
             recipe.setDescription(dto.duration);
 
-            recipe.setIngredients(new ArrayList<>());
-            recipe.setSteps(new ArrayList<>());
+            recipe.getIngredients().clear();
+            recipe.getSteps().clear();
 
             // INGREDIENTES
             if (dto.ingredients != null) {

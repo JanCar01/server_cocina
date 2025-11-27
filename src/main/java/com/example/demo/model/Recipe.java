@@ -31,7 +31,11 @@ public class Recipe {
         fetch = FetchType.EAGER           // 👈 opcional pero recomendable para tu caso
     )
     private List<RecipeIngredient> ingredients;
-
+    
+    public Recipe() {
+        this.ingredients = new ArrayList<>();
+        this.steps = new ArrayList<>();
+    }
     // --- Getters y Setters ---
     public Long getId() {
         return id;
