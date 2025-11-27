@@ -5,10 +5,10 @@ import java.util.List;
 public class RecipeInputDTO {
     public Long id;
 
-    @JsonProperty("title")
+    @JsonProperty("name")
     public String name;
 
-    @JsonProperty("duration")
+    @JsonProperty("description")
     public String description;
 
     public List<InputIngredientDTO> ingredients;
