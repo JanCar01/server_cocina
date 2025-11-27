@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.dto.RecipeDTO;
 import com.example.demo.dto.SyncRequestDTO;
 import com.example.demo.model.*;
+import com.example.demo.dto.RecipeInputDTO;
 import com.example.demo.repository.RecipeRepository;
 import com.example.demo.service.RecipeService;
 import com.example.demo.service.UserService;
