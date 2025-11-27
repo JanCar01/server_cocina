@@ -57,12 +57,17 @@ public class RecipeSyncController {
         // 3️⃣ Guardar o actualizar recetas
         for (RecipeDTO dto : data.recipes) {
 
-            Recipe recipe = recipeRepository.findById(dto.id).orElse(new Recipe());
+            Recipe recipe = recipeRepository.findById(dto.id).orElse(null);
+
+            if (recipe == null) {
+                recipe = new Recipe();
+                recipe.setId(dto.id); // ✔ SOLO si la BD lo permite
+            }
 
             recipe.setId(dto.id);
             recipe.setUser(user);
-            recipe.setName(dto.name);
-            recipe.setDescription(dto.description);
+            recipe.setName(dto.name != null ? dto.name : dto.title);
+            recipe.setDescription(dto.description != null ? dto.description : dto.duration);
 
             recipe.setIngredients(new ArrayList<>());
             recipe.setSteps(new ArrayList<>());
