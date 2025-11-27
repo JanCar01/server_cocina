@@ -1,11 +1,16 @@
 package com.example.demo.dto;
-
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 public class RecipeInputDTO {
     public Long id;
-    public String title;
-    public String duration;
+
+    @JsonProperty("title")
+    public String name;
+
+    @JsonProperty("duration")
+    public String description;
+
     public List<InputIngredientDTO> ingredients;
     public List<InputStepDTO> steps;
 
